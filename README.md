@@ -20,6 +20,10 @@ The Home Farmer Robot is a semi-automatic plant care robot designed to monitor a
 > ⚠️ The code might need to be updated or calibrated based on your sensor models and pump specifications.
 
 ## Author
+**Mentor:**  
+- Malhar Ashtaputre  
 
-**Vihaan Parlikar**  
-GitHub: [vihaanvp](https://github.com/vihaanvp)
+**Students:**
+- Vihaan Parlikar
+- Yogeshwar Deshmukh  
+
