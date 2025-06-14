@@ -1,0 +1,356 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f0f4f0; /* Very light, slightly green-tinted off-white */
+    color: #333333; /* Dark grey for primary text */
+    line-height: 1.6;
+}
+
+header {
+    background-color: #3A5A40; /* Solid, reliable dark green */
+    color: #DAD7CD; /* Light, earthy beige/off-white for text on dark green */
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+
+#text-logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #A3B18A; /* Lighter, muted green for logo */
+}
+
+/* If you use an image logo, uncomment and use this:
+#logo {
+    width: 100px; 
+    height: auto;
+    margin-bottom: 10px; 
+}
+*/
+
+header h1 { /* WRO Junior Future Innovators */
+    margin: 0;
+    font-size: 2.5rem;
+    color: #DAD7CD; /* Light, earthy beige/off-white */
+}
+
+nav {
+    text-align: center;
+    margin: 0; /* Remove top/bottom margin to stick to header/content */
+    padding: 1rem 0;
+    background-color: #4A7C59; /* A slightly lighter, complementary green for nav */
+}   
+
+nav a {
+    color: #ffffff; /* White links on the nav background */
+    margin: 0 1rem;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    text-decoration: underline;
+    color: #E9F5DB; /* Very light green/off-white on hover */
+}
+
+main {
+    padding-top: 1rem; 
+}
+
+section {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem 2rem;
+    background-color: #ffffff; /* White for content sections */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Softer shadow */
+}
+
+section h2 { /* Section titles */
+    color: #588157; /* Friendly, medium green */
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #588157; /* Green underline */
+}
+
+section h3 { /* Sub-headings within sections */
+    color: #4A7C59; /* Darker green for H3 */
+    font-size: 1.6rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+p, ul li {
+    margin-bottom: 1rem;
+    color: #454545; /* Slightly darker grey for better contrast on white */
+}
+
+ul {
+    list-style-position: inside;
+    padding-left: 20px;
+}
+ul li::marker {
+    color: #588157; /* Medium green for list bullets */
+}
+
+a { /* General link styling */
+    color: #34A853; /* Vibrant, modern green for links */
+    text-decoration: none;
+}
+
+a:hover { /* General link hover */
+    color: #2C8E45; /* Darker shade of the link green */
+    text-decoration: underline;
+}
+
+/* Specific element styling */
+.team-members {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.member {
+    flex-basis: 45%;
+    min-width: 250px;
+    background: #E9F5DB; /* Very light green for member boxes */
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #A3B18A; /* Soft, muted green border */
+}
+.member h3 {
+    color: #3A5A40; /* Dark green for member names */
+    margin-top: 0;
+    text-align: center;
+}
+
+.responsive-img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1.5rem auto;
+    border-radius: 8px;
+    border: 3px solid #A3B18A; /* Muted green border for images */
+}
+.small-img {
+    max-width: 60%;
+}
+.caption {
+    text-align: center;
+    font-style: italic;
+    color: #6c757d; /* Muted grey for captions */
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.9em;
+}
+
+.mission-overview {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 1.5rem;
+}
+.mission-box, .overview-box {
+    flex-basis: 48%;
+    padding: 1.5rem;
+    border: 1px solid #588157; /* Medium green border */
+    border-radius: 8px;
+    background-color: #f8f9fa; /* Slightly off-white, similar to body but distinct from section */
+}
+.mission-box h3, .overview-box h3 {
+    color: #3A5A40; /* Dark green */
+    text-align: center;
+}
+
+.journey-images {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+    gap: 15px;
+}
+.journey-images figure {
+    flex-basis: 45%;
+    min-width: 200px;
+    text-align: center;
+}
+.journey-images figcaption {
+     color: #588157; /* Medium green for figcaptions */
+     font-size: 0.9em;
+     margin-top: 0.5rem;
+}
+
+/* Components Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.95em;
+}
+
+th, td {
+    border: 1px solid #A3B18A; /* Muted green border */
+    padding: 0.75rem;
+    text-align: left;
+    color: #333333;
+}
+
+th {
+    background-color: #588157; /* Medium green for table headers */
+    color: #ffffff; /* White text for contrast */
+    font-weight: bold;
+}
+tr:nth-child(even) {
+    background-color: #E9F5DB; /* Very light green for even rows */
+}
+
+
+/* Component Details Grid */
+.component-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+.component-details > div {
+    background: #f8f9fa; /* Light off-white */
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #A3B18A; /* Muted green border */
+}
+.component-details h4 {
+    color: #4A7C59; /* Darker green for component titles */
+    margin-bottom: 0.5rem;
+}
+.component-details ul li {
+    font-size: 0.9em;
+    color: #454545;
+}
+
+
+/* Sources List */
+#sources ul li a {
+    color: #34A853; /* Vibrant green */
+}
+#sources ul li a:hover {
+    color: #2C8E45; /* Darker vibrant green */
+}
+
+footer {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background-color: #3A5A40; /* Match header dark green */
+    /* color: #ffffff; */ /* We'll set color on the p tag directly */
+    margin-top: 2rem;
+}
+
+footer p { /* ADDED/MODIFIED: Target the paragraph inside the footer */
+    color: #ffffff; /* White for maximum visibility */
+    margin-bottom: 0; /* Optional: remove default p margin if not needed in footer */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+    #text-logo {
+        font-size: 1.5rem;
+    }
+
+    nav a {
+        margin: 0 0.5rem;
+        font-size: 1em;
+    }
+
+    section {
+        margin: 1.5rem 1rem;
+        padding: 1rem 1.5rem;
+    }
+    section h2 {
+        font-size: 1.8rem;
+    }
+    section h3 {
+        font-size: 1.4rem;
+    }
+
+    .team-members, .mission-overview, .journey-images {
+        flex-direction: column;
+        align-items: center;
+    }
+    .member, .mission-box, .overview-box, .journey-images figure {
+        flex-basis: 100%;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    .small-img {
+        max-width: 80%;
+    }
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 1.5rem;
+    }
+    header h1 {
+        font-size: 1.8rem;
+    }
+    #text-logo {
+        font-size: 1.3rem;
+    }
+
+    nav {
+        padding: 0.5rem;
+    }
+    nav a {
+        display: block;
+        margin: 0.5rem auto;
+        padding: 0.5rem; /* Increased padding for better touch target */
+        border-bottom: 1px solid #3A5A40; /* Separator for stacked links, matching header green */
+    }
+    nav a:last-child {
+        border-bottom: none;
+    }
+
+    section {
+        margin: 1rem;
+        padding: 1rem;
+    }
+    section h2 {
+        font-size: 1.6rem;
+    }
+    section h3 {
+        font-size: 1.3rem;
+    }
+    
+    table, th, td {
+        font-size: 0.85em;
+        padding: 0.5rem;
+    }
+    .component-details {
+        grid-template-columns: 1fr;
+    }
+}
