@@ -1,4 +1,3 @@
-/* Basic Reset */
 * {
     margin: 0;
     padding: 0;
@@ -12,14 +11,14 @@ html {
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background-color: #f0f4f0; /* Very light, slightly green-tinted off-white */
-    color: #333333; /* Dark grey for primary text */
+    background-color: #f0f4f0;
+    color: #333333;
     line-height: 1.6;
 }
 
 header {
-    background-color: #3A5A40; /* Solid, reliable dark green */
-    color: #DAD7CD; /* Light, earthy beige/off-white for text on dark green */
+    background-color: #3A5A40;
+    color: #DAD7CD;
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -32,32 +31,24 @@ header {
 #text-logo {
     font-size: 1.8rem;
     font-weight: bold;
-    color: #A3B18A; /* Lighter, muted green for logo */
+    color: #A3B18A;
 }
 
-/* If you use an image logo, uncomment and use this:
-#logo {
-    width: 100px; 
-    height: auto;
-    margin-bottom: 10px; 
-}
-*/
-
-header h1 { /* WRO Junior Future Innovators */
+header h1 {
     margin: 0;
     font-size: 2.5rem;
-    color: #DAD7CD; /* Light, earthy beige/off-white */
+    color: #DAD7CD;
 }
 
 nav {
     text-align: center;
-    margin: 0; /* Remove top/bottom margin to stick to header/content */
+    margin: 0;
     padding: 1rem 0;
-    background-color: #4A7C59; /* A slightly lighter, complementary green for nav */
+    background-color: #4A7C59;
 }   
 
 nav a {
-    color: #ffffff; /* White links on the nav background */
+    color: #ffffff;
     margin: 0 1rem;
     text-decoration: none;
     font-weight: bold;
@@ -67,7 +58,7 @@ nav a {
 
 nav a:hover {
     text-decoration: underline;
-    color: #E9F5DB; /* Very light green/off-white on hover */
+    color: #E9F5DB;
 }
 
 main {
@@ -78,22 +69,22 @@ section {
     max-width: 800px;
     margin: 2rem auto;
     padding: 1.5rem 2rem;
-    background-color: #ffffff; /* White for content sections */
+    background-color: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-section h2 { /* Section titles */
-    color: #588157; /* Friendly, medium green */
+section h2 {
+    color: #588157;
     font-size: 2.2rem;
     text-align: center;
     margin-bottom: 1.5rem;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid #588157; /* Green underline */
+    border-bottom: 2px solid #588157;
 }
 
-section h3 { /* Sub-headings within sections */
-    color: #4A7C59; /* Darker green for H3 */
+section h3 {
+    color: #4A7C59;
     font-size: 1.6rem;
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
@@ -101,7 +92,7 @@ section h3 { /* Sub-headings within sections */
 
 p, ul li {
     margin-bottom: 1rem;
-    color: #454545; /* Slightly darker grey for better contrast on white */
+    color: #454545;
 }
 
 ul {
@@ -109,20 +100,19 @@ ul {
     padding-left: 20px;
 }
 ul li::marker {
-    color: #588157; /* Medium green for list bullets */
+    color: #588157;
 }
 
-a { /* General link styling */
-    color: #34A853; /* Vibrant, modern green for links */
+a {
+    color: #34A853;
     text-decoration: none;
 }
 
-a:hover { /* General link hover */
-    color: #2C8E45; /* Darker shade of the link green */
+a:hover {
+    color: #2C8E45;
     text-decoration: underline;
 }
 
-/* Specific element styling */
 .team-members {
     display: flex;
     justify-content: space-around;
@@ -135,13 +125,13 @@ a:hover { /* General link hover */
 .member {
     flex-basis: 45%;
     min-width: 250px;
-    background: #E9F5DB; /* Very light green for member boxes */
+    background: #E9F5DB;
     padding: 1rem;
     border-radius: 8px;
-    border: 1px solid #A3B18A; /* Soft, muted green border */
+    border: 1px solid #A3B18A;
 }
 .member h3 {
-    color: #3A5A40; /* Dark green for member names */
+    color: #3A5A40;
     margin-top: 0;
     text-align: center;
 }
@@ -152,7 +142,7 @@ a:hover { /* General link hover */
     display: block;
     margin: 1.5rem auto;
     border-radius: 8px;
-    border: 3px solid #A3B18A; /* Muted green border for images */
+    border: 3px solid #A3B18A;
 }
 .small-img {
     max-width: 60%;
@@ -160,7 +150,7 @@ a:hover { /* General link hover */
 .caption {
     text-align: center;
     font-style: italic;
-    color: #6c757d; /* Muted grey for captions */
+    color: #6c757d;
     margin-top: -0.5rem;
     margin-bottom: 1rem;
     font-size: 0.9em;
@@ -175,12 +165,12 @@ a:hover { /* General link hover */
 .mission-box, .overview-box {
     flex-basis: 48%;
     padding: 1.5rem;
-    border: 1px solid #588157; /* Medium green border */
+    border: 1px solid #588157;
     border-radius: 8px;
-    background-color: #f8f9fa; /* Slightly off-white, similar to body but distinct from section */
+    background-color: #f8f9fa;
 }
 .mission-box h3, .overview-box h3 {
-    color: #3A5A40; /* Dark green */
+    color: #3A5A40;
     text-align: center;
 }
 
@@ -198,7 +188,7 @@ a:hover { /* General link hover */
     text-align: center;
 }
 .journey-images figcaption {
-     color: #588157; /* Medium green for figcaptions */
+     color: #588157;
      font-size: 0.9em;
      margin-top: 0.5rem;
 }
@@ -212,23 +202,22 @@ table {
 }
 
 th, td {
-    border: 1px solid #A3B18A; /* Muted green border */
+    border: 1px solid #A3B18A;
     padding: 0.75rem;
     text-align: left;
     color: #333333;
 }
 
 th {
-    background-color: #588157; /* Medium green for table headers */
-    color: #ffffff; /* White text for contrast */
+    background-color: #588157;
+    color: #ffffff;
     font-weight: bold;
 }
 tr:nth-child(even) {
-    background-color: #E9F5DB; /* Very light green for even rows */
+    background-color: #E9F5DB;
 }
 
 
-/* Component Details Grid */
 .component-details {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -236,13 +225,13 @@ tr:nth-child(even) {
     margin-top: 1.5rem;
 }
 .component-details > div {
-    background: #f8f9fa; /* Light off-white */
+    background: #f8f9fa;
     padding: 1rem;
     border-radius: 8px;
-    border: 1px solid #A3B18A; /* Muted green border */
+    border: 1px solid #A3B18A;
 }
 .component-details h4 {
-    color: #4A7C59; /* Darker green for component titles */
+    color: #4A7C59;
     margin-bottom: 0.5rem;
 }
 .component-details ul li {
@@ -253,23 +242,22 @@ tr:nth-child(even) {
 
 /* Sources List */
 #sources ul li a {
-    color: #34A853; /* Vibrant green */
+    color: #34A853;
 }
 #sources ul li a:hover {
-    color: #2C8E45; /* Darker vibrant green */
+    color: #2C8E45;
 }
 
 footer {
     text-align: center;
     padding: 1.5rem 1rem;
-    background-color: #3A5A40; /* Match header dark green */
-    /* color: #ffffff; */ /* We'll set color on the p tag directly */
+    background-color: #3A5A40;
     margin-top: 2rem;
 }
 
-footer p { /* ADDED/MODIFIED: Target the paragraph inside the footer */
-    color: #ffffff; /* White for maximum visibility */
-    margin-bottom: 0; /* Optional: remove default p margin if not needed in footer */
+footer p {
+    color: #ffffff;
+    margin-bottom: 0;
 }
 
 /* Responsive Adjustments */
@@ -328,8 +316,8 @@ footer p { /* ADDED/MODIFIED: Target the paragraph inside the footer */
     nav a {
         display: block;
         margin: 0.5rem auto;
-        padding: 0.5rem; /* Increased padding for better touch target */
-        border-bottom: 1px solid #3A5A40; /* Separator for stacked links, matching header green */
+        padding: 0.5rem;
+        border-bottom: 1px solid #3A5A40;
     }
     nav a:last-child {
         border-bottom: none;
@@ -357,7 +345,7 @@ footer p { /* ADDED/MODIFIED: Target the paragraph inside the footer */
 
 .video-responsive {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
     margin-bottom: 1.5rem;

@@ -1,10 +1,9 @@
+// Smooth scrolling for all nav links in the webpage (Disables external navigation links in navbar)
 document.addEventListener('DOMContentLoaded', function() {
-
-    // Smooth scrolling for navigation links
     const navLinks = document.querySelectorAll('nav a');
     const headerHeight = document.querySelector('header').offsetHeight;
     const navHeight = document.querySelector('nav').offsetHeight;
-    const offset = headerHeight + navHeight + 20; // Combined height + some padding
+    const offset = headerHeight + navHeight + 20;
 
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
