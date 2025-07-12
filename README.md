@@ -4,6 +4,8 @@ The Home Farmer Robot is a semi-automatic plant care robot designed to monitor a
 
 For more info, [click here](https://homefarmer.vihaanvp.me/)
 
+> Note: You will require the Operate Library for the code to work. To download the Operate Library, click [here](https://github.com/The-Rooftop-Farmers/Operate-Lib/releases)
+
 ## Features
 
 - Soil moisture detection
