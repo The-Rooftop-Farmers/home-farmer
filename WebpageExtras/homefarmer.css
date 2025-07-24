@@ -440,3 +440,7 @@ tbody tr:last-child td {
     border-radius: 12px;
   }
 }
+
+#middle {
+  text-align: center;
+}
