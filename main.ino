@@ -837,7 +837,7 @@ void loop() {
       lcd.print(daysOfTheWeek[rtc.dayOfWeek() - 1]);
 
       lcd.setCursor(2, 2);
-      lcd.print("Water Planting...");
+      lcd.print("Watering Plants..");
       lcd.setCursor(2, 3);
       lcd.print("Please wait...");
       watering();
