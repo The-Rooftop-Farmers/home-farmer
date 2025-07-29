@@ -1,0 +1,5 @@
+X axis (accounting for the gripper's offset):
+	Steps = (target_cm_value - 11.7)(406.78)
+
+Y axis
+	Steps = 419.65 * target_cm_value
