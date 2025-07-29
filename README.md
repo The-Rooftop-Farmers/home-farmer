@@ -2,7 +2,7 @@
 
 The Home Farmer Robot is a semi-automatic plant care robot designed to monitor and maintain optimal growing conditions for small-scale indoor farming. Built for the World Robot Olympiad competition, this project uses a bunch of sensors and coding logic to automate irrigation and environmental monitoring.
 
-For more info, [click here](https://homefarmer.vihaanvp.me/)
+For more info, [click here](https://the-rooftop-farmers.github.io/home-farmer)
 
 > Note: You will require the Operate Library for the code to work. To download the Operate Library, click [here](https://github.com/The-Rooftop-Farmers/Operate-Lib/releases)
 
