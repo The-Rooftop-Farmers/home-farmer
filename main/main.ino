@@ -35,7 +35,7 @@ long mois = 0;
 char daysOfTheWeek[7][12] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 
 // LCD object 20x4 at I2C address 0x27
-LiquidCrystal_I2C lcd(0x27, 20, 4); 
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 int d, mo, y, h, m, s, AP;
 int readData;
 int hum, temp;
@@ -337,23 +337,54 @@ void watering() {
   delay(afterwatdel);
 }
 
+/* 
+  Function to convert cm to steps and vice versa
+  Usage syntax: seedplant(UnitConversion(cm_X), UnitConversion(cm_Y));
+  Expected Values: axis (X or Y), value(any value), outputUnit(steps or cm)
+*/
+long UnitConversion(char axis, int value, String outputUnit) {
+  const float xStepsPerCm = 12000.0 / 29.5;
+  const float yStepsPerCm = 14500.0 / 34.6;
+  const float xOffset = 11.7;
+
+  if (outputUnit == "steps") {
+    if (axis == 'X') {
+      float steps = (value - xOffset) * xStepsPerCm;
+      return lround(steps);
+    } else if (axis == 'Y') {
+      float steps = value * yStepsPerCm;
+      return lround(steps);
+    }
+  } else if (outputUnit == "cm") {
+    if (axis == 'X') {
+      float cm = (value / xStepsPerCm) + xOffset;
+      return lround(cm);
+    } else if (axis == 'Y') {
+      float cm = value / yStepsPerCm;
+      return lround(cm);
+    }
+  }
+
+  return -1;
+}
+
 // FINALLY we have the void setup
 // Some of the comments written inside are mine
 void setup() {
   pick.attach(13);
   // Define pins to the different components (idk which pin is which component)
   // Setup pin modes
-  pinMode(2, OUTPUT); // X step
-  pinMode(3, OUTPUT); // Y step
-  pinMode(4, OUTPUT); // Z step
-  pinMode(9, INPUT_PULLUP);  // X limit switch
-  pinMode(10, INPUT_PULLUP); // Y limit switch
-  pinMode(11, INPUT_PULLUP); // Z limit switch
-  pinMode(5, OUTPUT); // X dir
-  pinMode(6, OUTPUT); // Y dir
-  pinMode(7, OUTPUT); // Z dir
-  pinMode(12, OUTPUT); // Water
-  pinMode(8, OUTPUT);  // Not used here
+  pinMode(2, OUTPUT);         // X step
+  pinMode(3, OUTPUT);         // Y step
+  pinMode(4, OUTPUT);         // Z step
+  pinMode(9, INPUT_PULLUP);   // X limit switch
+  pinMode(10, INPUT_PULLUP);  // Y limit switch
+  pinMode(11, INPUT_PULLUP);  // Z limit switch
+  pinMode(5, OUTPUT);         // X dir
+  pinMode(6, OUTPUT);         // Y dir
+  pinMode(7, OUTPUT);         // Z dir
+  pinMode(12, OUTPUT);        // Water
+  pinMode(8, OUTPUT);         // Not used here
   digitalWrite(8, LOW);
   digitalWrite(12, LOW);
 
@@ -381,9 +412,9 @@ void setup() {
   readDHT();
 
   // Define motors
-  mot_x.setPin(2, 5); // x
-  mot_y.setPin(3, 6); // y
-  mot_z.setPin(4, 7); // z
+  mot_x.setPin(2, 5);  // x
+  mot_y.setPin(3, 6);  // y
+  mot_z.setPin(4, 7);  // z
   // Set Motor speeds
   mot_x.setSpeed(160);
   mot_y.setSpeed(160);
@@ -395,7 +426,7 @@ void setup() {
   // Set position limits for all the motors
   mot_x.setPositionLimits(12000, 0);
   mot_y.setPositionLimits(14000, 0);
-  mot_z.setPositionLimits(65000, 0); // Yes the 65000 is not a typo, its a motor attached to a lead screw
+  mot_z.setPositionLimits(65000, 0);  // Yes the 65000 is not a typo, its a motor attached to a lead screw
 
   // Print the Initializing Screen on the LCD
   // Homing sequence with progress display
@@ -446,12 +477,12 @@ void loop() {
   // Main UI state machine
   // Define the screens and the role of the Rotary Encoder
   switch (screen) {
-    case 0: // Home Screen (is without the selector arrow)
+    case 0:  // Home Screen (is without the selector arrow)
       homeScreen();
       rtccount = 0;
-      screen = 1; // Directly shifts to the Home Screen 2
+      screen = 1;  // Directly shifts to the Home Screen 2
       break;
-    case 1: // Home Screen with Selector on "Menu"
+    case 1:  // Home Screen with Selector on "Menu"
       readrotary();
       readbutton(0);
       RTCupdate();
@@ -461,7 +492,7 @@ void loop() {
       lcd.print(" ");
       shiftscreen(2, 1);
       break;
-    case 2: // Home Screen with Selector on "Info"
+    case 2:  // Home Screen with Selector on "Info"
       readrotary();
       readbutton(1);
       RTCupdate();
@@ -471,7 +502,7 @@ void loop() {
       lcd.print(">");
       shiftscreen(1, 2);
       break;
-    case 3: // Info Screen (When user selects "Info" on the Home screen)
+    case 3:  // Info Screen (When user selects "Info" on the Home screen)
       lcd.clear();
       lcd.setCursor(2, 0);
       lcd.print("Home Farmer V2.4");
@@ -485,7 +516,7 @@ void loop() {
       delay(7000);
       screen = 0;
       break;
-    case 4: // Plant seed screen under menu (When user clicks on "Menu" on the Home screen or when the user turns rotary to the left from "Water Plants" screen)
+    case 4:  // Plant seed screen under menu (When user clicks on "Menu" on the Home screen or when the user turns rotary to the left from "Water Plants" screen)
       lcd.clear();
       lcd.setCursor(15, 0);
       if (h > 9) {
@@ -531,13 +562,13 @@ void loop() {
       rtccount = 0;
       screen = 5;
       break;
-    case 5: // Read the Rotary
+    case 5:  // Read the Rotary
       readrotary();
       readbutton(3);
       RTCupdate();
       shiftscreen(5, 6);
       break;
-    case 6: // Water Plants screen under Menu (When user moves the encoder to the right when on "Plant Seed" screen or to the left when on "Parameters" screen)
+    case 6:  // Water Plants screen under Menu (When user moves the encoder to the right when on "Plant Seed" screen or to the left when on "Parameters" screen)
       lcd.setCursor(2, 2);
       lcd.print("-|Water Plants|-");
       lcd.setCursor(0, 3);
@@ -545,13 +576,13 @@ void loop() {
       rtccount = 0;
       screen = 7;
       break;
-    case 7: // Read the Rotary
+    case 7:  // Read the Rotary
       readrotary();
       readbutton(4);
       RTCupdate();
       shiftscreen(4, 8);
       break;
-    case 8: // Parameters screen under Menu (When user moves the encoder to the right when on "Water Plants" screen or left from the "Exit" screen)
+    case 8:  // Parameters screen under Menu (When user moves the encoder to the right when on "Water Plants" screen or left from the "Exit" screen)
       lcd.setCursor(1, 2);
       lcd.print("                  ");
       lcd.setCursor(2, 2);
@@ -563,13 +594,13 @@ void loop() {
       rtccount = 0;
       screen = 9;
       break;
-    case 9: // Read the rotary
+    case 9:  // Read the rotary
       readrotary();
       readbutton(5);
       RTCupdate();
       shiftscreen(6, 10);
       break;
-    case 10: // Exit screen under Menu (When user moves the encoder to the right when on "Parameters screen")
+    case 10:  // Exit screen under Menu (When user moves the encoder to the right when on "Parameters screen")
       lcd.setCursor(1, 2);
       lcd.print("                  ");
       lcd.setCursor(6, 2);
@@ -581,13 +612,13 @@ void loop() {
       rtccount = 0;
       screen = 11;
       break;
-    case 11: // Read the Rotary
+    case 11:  // Read the Rotary
       readrotary();
       readbutton(6);
       RTCupdate();
       shiftscreen(8, 10);
       break;
-    case 12: // Plant Seeds Now screen when arrow is on Yes (Shown when the user clicks the rotary button when on the Plant Seeds screen)
+    case 12:  // Plant Seeds Now screen when arrow is on Yes (Shown when the user clicks the rotary button when on the Plant Seeds screen)
       lcd.clear();
       lcd.setCursor(15, 0);
       if (h > 9) {
@@ -640,13 +671,13 @@ void loop() {
       screen = 13;
       rtccount = 0;
       break;
-    case 13: // Read the rotary
+    case 13:  // Read the rotary
       readrotary();
       readbutton(7);
       RTCupdate();
       shiftscreen(12, 14);
       break;
-    case 14: // Plant Seeds Now screen when the arrow is on No (Triggered when the user turns encoder to the right)
+    case 14:  // Plant Seeds Now screen when the arrow is on No (Triggered when the user turns encoder to the right)
       lcd.setCursor(1, 3);
       lcd.print(" ");
       lcd.setCursor(15, 3);
@@ -656,7 +687,7 @@ void loop() {
       RTCupdate();
       shiftscreen(14, 12);
       break;
-    case 15: // Seed Planting Progress screen (Triggered when user clicks on Yes in the Plant Seeds Now screen)
+    case 15:  // Seed Planting Progress screen (Triggered when user clicks on Yes in the Plant Seeds Now screen)
       lcd.clear();
       lcd.setCursor(15, 0);
       if (h > 9) {
@@ -733,7 +764,7 @@ void loop() {
       delay(2000);
       screen = 0;
       break;
-    case 16: // Water Plants Now screen without arrows (Triggered when the user clicks the encoder button when on the Water Plants screen)
+    case 16:  // Water Plants Now screen without arrows (Triggered when the user clicks the encoder button when on the Water Plants screen)
       delay(300);
       lcd.clear();
       lcd.setCursor(15, 0);
@@ -781,7 +812,7 @@ void loop() {
       screen = 17;
       rtccount = 0;
       break;
-    case 17: // Water Plants now screen with the arrow on Yes (Triggered right after the Water Plants Now screen)
+    case 17:  // Water Plants now screen with the arrow on Yes (Triggered right after the Water Plants Now screen)
       lcd.setCursor(1, 3);
       lcd.print(">");
 
@@ -792,7 +823,7 @@ void loop() {
       RTCupdate();
       shiftscreen(17, 18);
       break;
-    case 18: // Water Plants now screen with the arrow on No (Triggered after moving encoder right after the Water Plants Now screen while the arrow is on Yes)
+    case 18:  // Water Plants now screen with the arrow on No (Triggered after moving encoder right after the Water Plants Now screen while the arrow is on Yes)
       lcd.setCursor(1, 3);
       lcd.print(" ");
 
@@ -803,7 +834,7 @@ void loop() {
       RTCupdate();
       shiftscreen(18, 17);
       break;
-    case 19: // Watering progress screen (Triggered after clicking the encoder button while the arrow is on Yes on the Water Plants now screen)
+    case 19:  // Watering progress screen (Triggered after clicking the encoder button while the arrow is on Yes on the Water Plants now screen)
       lcd.clear();
       lcd.setCursor(15, 0);
       if (h > 9) {
@@ -880,7 +911,7 @@ void loop() {
       delay(2000);
       screen = 0;
       break;
-    case 20: // Parameters screen (Triggered when encoder button is clicked on Parameters screen under Menu)
+    case 20:  // Parameters screen (Triggered when encoder button is clicked on Parameters screen under Menu)
       readDHT();
       readRTC();
       lcd.setCursor(3, 0);
