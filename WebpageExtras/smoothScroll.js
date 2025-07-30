@@ -1,6 +1,6 @@
 // Smooth scrolling for all nav links in the webpage (Disables external navigation links in navbar)
 document.addEventListener('DOMContentLoaded', function() {
-    const navLinks = document.querySelectorAll('nav a');
+    const navLinks = document.getElementsByClassName('internal-nav');
     const headerHeight = document.querySelector('header').offsetHeight;
     const navHeight = document.querySelector('nav').offsetHeight;
     const offset = headerHeight + navHeight + 20;
