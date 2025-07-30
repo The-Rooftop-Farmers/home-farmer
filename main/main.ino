@@ -31,6 +31,11 @@ uRTCLib rtc(0x68);  // RTC at I2C address 0x68
 dht DHT;
 long mois = 0;
 
+// Custom Position when Seeding
+bool customloc = false;
+int x_cust_val = 0;
+int y_cust_val = 0;
+
 // Days of the week (I know the order of the days is wrong)
 char daysOfTheWeek[7][12] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 
@@ -296,17 +301,24 @@ void seedplant(long x, long y) {
 // Use the 2 functions above to place the seeds at set locations (for testing only)
 // Plant all seeds (sequence)
 void seeding() {
-  seedpickarea();
-  seedplant(500, 4000);
+  if (customloc) {
+    mot_y.setPosition(UnitConversion('Y', y_cust_val, "steps"));
+    delay(100);
+    mot_x.setPosition(UnitConversion('X', x_cust_val, "steps"));
+    delay(1500);
+  } else {
+    seedpickarea();
+    seedplant(500, 4000);
 
-  seedpickarea();
-  seedplant(500, 12000);
+    seedpickarea();
+    seedplant(500, 12000);
 
-  seedpickarea();
-  seedplant(8000, 4000);
+    seedpickarea();
+    seedplant(8000, 4000);
 
-  seedpickarea();
-  seedplant(8000, 12000);
+    seedpickarea();
+    seedplant(8000, 12000);
+  }
 }
 
 // Water the coordinates at which the seeds are placed
@@ -350,10 +362,10 @@ long UnitConversion(char axis, int value, String outputUnit) {
 
   if (outputUnit == "steps") {
     if (axis == 'X') {
-      float steps = (value - xOffset) * xStepsPerCm;
+      float steps = (value - xOffset) * xStepsPerCm + 12;
       return lround(steps);
     } else if (axis == 'Y') {
-      float steps = (value + halfSquareWidth) * yStepsPerCm;
+      float steps = (value + halfSquareWidth) * yStepsPerCm - 5.4;
       return lround(steps);
     }
   } else if (outputUnit == "cm") {
