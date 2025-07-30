@@ -346,13 +346,14 @@ long UnitConversion(char axis, int value, String outputUnit) {
   const float xStepsPerCm = 12000.0 / 29.5;
   const float yStepsPerCm = 14500.0 / 34.6;
   const float xOffset = 11.7;
+  const float halfSquareWidth = 3.5;
 
   if (outputUnit == "steps") {
     if (axis == 'X') {
       float steps = (value - xOffset) * xStepsPerCm;
       return lround(steps);
     } else if (axis == 'Y') {
-      float steps = value * yStepsPerCm;
+      float steps = (value + halfSquareWidth) * yStepsPerCm;
       return lround(steps);
     }
   } else if (outputUnit == "cm") {
@@ -360,7 +361,7 @@ long UnitConversion(char axis, int value, String outputUnit) {
       float cm = (value / xStepsPerCm) + xOffset;
       return lround(cm);
     } else if (axis == 'Y') {
-      float cm = value / yStepsPerCm;
+      float cm = (value / yStepsPerCm) - halfSquareWidth;
       return lround(cm);
     }
   }
