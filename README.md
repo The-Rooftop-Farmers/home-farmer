@@ -1,7 +1,5 @@
 # Home Farmer Robot
 
-> Thank you for supporting the Home Farmer project! We have now reached the end of the project. We will look into the future of the robot, but we have decided to close the GitHub Repository at minimum. 👋🏼
-
 The Home Farmer Robot is a semi-automatic plant care robot designed to monitor and maintain optimal growing conditions for small-scale indoor farming. Built for the World Robot Olympiad competition, this project uses a bunch of sensors and coding logic to automate irrigation and environmental monitoring.
 
 For more info, [click here](https://the-rooftop-farmers.github.io/home-farmer)
