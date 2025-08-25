@@ -384,6 +384,9 @@ long UnitConversion(char axis, int value, String outputUnit) {
 // FINALLY we have the void setup
 // Some of the comments written inside are mine
 void setup() {
+  // Begin Serial
+  Serial.begin(9600);
+
   pick.attach(13);
   // Define pins to the different components (idk which pin is which component)
   // Setup pin modes
@@ -487,6 +490,19 @@ void setup() {
 }
 
 void loop() {
+  // Alexa Integration
+  if (Serial.available()) {
+    String cmd = Serial.readStringUntil('\n');
+    cmd.trim();
+
+    if (cmd == "SEED") {
+      screen = 15;
+    } else if (cmd == "WATER") {
+      screen = 19;
+    }
+  }
+
+
   // Main UI state machine
   // Define the screens and the role of the Rotary Encoder
   switch (screen) {
