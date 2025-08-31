@@ -20,6 +20,7 @@ Servo pick;
 #include "uRTCLib.h"
 #include <dht.h>
 #include <operate.h>
+#include <avr/wdt.h>
 
 // Defining some more macros
 #define outPin 0
@@ -35,6 +36,10 @@ long mois = 0;
 bool customloc = false;
 int x_cust_val = 0;
 int y_cust_val = 0;
+
+// Boolean to figure out if command is from Alexa
+bool alexabool = false;
+volatile bool reset_required = false;
 
 // Days of the week (I know the order of the days is wrong)
 char daysOfTheWeek[7][12] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
@@ -93,6 +98,12 @@ void readrotary() {
   }
   // Remember last CLK state
   lastStateCLK = currentStateCLK;
+}
+
+// Function to reset the arduino in code
+void softwareReset() {
+  wdt_enable(WDTO_15MS); // reset after 15 ms
+  while (1) {}
 }
 
 // Function to read the button state of the Rotary Encoder and switch the screen accordingly (dunno about the last part)
@@ -163,15 +174,86 @@ void readRTC() {
 // Function for the Home Screen code
 // Show home screen on LCD
 void homeScreen() {
-  // LCD code unchanged
-  // ... (omitted for brevity)
+  // Print the Day
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  if (d > 9) {
+    lcd.print(d);
+  } else {
+    lcd.print("0");
+    lcd.print(d);
+  }
+  // Print the month
+  lcd.print("/");
+  if (mo > 9) {
+    lcd.print(mo);
+  } else {
+    lcd.print("0");
+    lcd.print(mo);
+  }
+  // Print the year
+  lcd.print("/");
+  lcd.print(y);
+  lcd.print(" ");
+  // Print the day
+  lcd.print(daysOfTheWeek[rtc.dayOfWeek() - 1]);
+
+  lcd.setCursor(0, 1);
+  // Print the time (HH:MM) in 12-hour format
+  if (h > 9) {
+    lcd.print(h);
+  } else {
+    lcd.print("0");
+    lcd.print(h);
+  }
+  lcd.print(":");
+  if (m > 9) {
+    lcd.print(m);
+  } else {
+    lcd.print("0");
+    lcd.print(m);
+  }
+  lcd.print(" ");
+  // Determine AM or PM using the AP boolean
+  if (AP == 1)
+    lcd.print("PM");
+  else
+    lcd.print("AM");
+
+  lcd.setCursor(15, 0);
+  // Print Humidity
+  lcd.print("H:");
+  lcd.print(hum);
+  lcd.print("%");
+
+  lcd.setCursor(15, 1);
+  // Print temperature
+  lcd.print("T:");
+  lcd.print(temp);
+  lcd.print("C");
+
+  lcd.setCursor(5, 2);
+  // Print the Title Text
+  lcd.print("Home Farmer");
+
+  // Print the Selectable Options
+  lcd.setCursor(3, 3);
+  lcd.print("Menu");
+
+  lcd.setCursor(13, 3);
+  lcd.print("Info");
 }
 
 // Function to read the DHT when called
-void readDHT() {
-  readData = DHT.read11(outPin);
+void readDHT(String cmd) {
+  /*readData = DHT.read11(outPin);
   temp = DHT.temperature;
-  hum = DHT.humidity;
+  hum = DHT.humidity;*/
+  int commaIdx = cmd.indexOf(',');
+  if (commaIdx > 4) {
+    temp = cmd.substring(4, commaIdx).toInt();
+    hum = cmd.substring(commaIdx + 1).toInt();
+  }
 }
 
 // Update the RTC and DHT every 8 seconds (to avoid lag)
@@ -179,7 +261,6 @@ void RTCupdate() {
   rtccount++;
   if (rtccount > 8000) {
     readRTC();
-    readDHT();
     screen = 0;
     rtccount = 0;
   }
@@ -224,23 +305,36 @@ void seedplant(long x, long y) {
 }
 
 void seeding() {
+  checkSerial();
   if (customloc) {
     mot_y.setPosition(UnitConversion('Y', y_cust_val, "steps"));
+    checkSerial();
     delay(100);
+    checkSerial();
     mot_x.setPosition(UnitConversion('X', x_cust_val, "steps"));
+    checkSerial();
     delay(1500);
+    checkSerial();
   } else {
     seedpickarea();
+    checkSerial();
     seedplant(500, 4000);
+    checkSerial();
 
     seedpickarea();
+    checkSerial();
     seedplant(500, 12000);
+    checkSerial();
 
     seedpickarea();
+    checkSerial();
     seedplant(8000, 4000);
+    checkSerial();
 
     seedpickarea();
+    checkSerial();
     seedplant(8000, 12000);
+    checkSerial();
   }
 }
 
@@ -252,12 +346,17 @@ void watering() {
   for (int i = 0; i < 4; i++) {
     // Move to plant location and put sensor in soil
     seedplant(x_coords[i], y_coords[i]);
-    delay(2000);  // Wait for sensor to stabilize in soil
+    checkSerial();
+    delay(2000);
+    checkSerial();
 
     // Read initial moisture
     mois = analogRead(A3);
+    checkSerial();
     mois = map(mois, 230, 1023, 0, 100);
+    checkSerial();
     mois = 100 - mois;
+    checkSerial();
 
     if (mois < 40) {
       // Sensor out before watering
@@ -265,8 +364,11 @@ void watering() {
       delay(500);
       // Water and check until >= 70%
       while (true) {
+        checkSerial();
         digitalWrite(12, HIGH);
+        checkSerial();
         delay(2000);  // Short watering burst
+        checkSerial();
         digitalWrite(12, LOW);
         delay(1000);  // Allow water to seep
 
@@ -279,6 +381,7 @@ void watering() {
         // Take sensor out again
         mot_z.setPosition(50000);
         delay(500);
+        checkSerial();
         if (mois >= 70) {
           break;
         }
@@ -314,6 +417,66 @@ long UnitConversion(char axis, int value, String outputUnit) {
   return -1;
 }
 
+// Sends current soil moisture to Pi
+void sendMoistureToPi() {
+  Serial.print("MOISTURE:");
+  int raw = analogRead(A3);
+  if (raw < 10 || raw > 1010) {  // likely unplugged
+    mois = -1;
+  } else {
+    mois = map(raw, 230, 1023, 0, 100);
+    mois = 100 - mois;
+  }
+
+  Serial.println(mois);  // mois is already in percent
+}
+
+// Receives DHT data from Pi and updates temp/hum
+/*void receiveDHTFromPi() {
+  if (Serial.available()) {
+    String line = Serial.readStringUntil('\n');
+    line.trim();
+    if (line.startsWith("DHT:")) {
+      int commaIdx = line.indexOf(',');
+      if (commaIdx > 4) {
+        temp = line.substring(4, commaIdx).toInt();
+        hum = line.substring(commaIdx + 1).toInt();
+      }
+    }
+  }
+}
+*/
+
+void homeAllMotors() {
+  mot_z.home();
+  mot_x.home();
+  mot_y.home();
+  delay(5);
+  mot_z.home();
+  mot_x.home();
+  mot_y.home();
+}
+
+void checkSerial() {
+  if (Serial.available()) {
+    String cmd = Serial.readStringUntil('\n');
+    cmd.trim();
+
+    if (cmd == "RESET") {
+      softwareReset();
+    } else if (cmd == "SEED") {
+      homeAllMotors();
+      alexabool = true;
+      screen = 15;
+    } else if (cmd == "WATER") {
+      homeAllMotors();
+      screen = 19;
+    } else if (cmd.startsWith("DHT:")) {
+      readDHT(cmd);
+    }
+  }
+}
+
 void setup() {
   Serial.begin(9600);
   pick.attach(13);
@@ -341,7 +504,6 @@ void setup() {
   else
     lastStateCLK = 0;
   readRTC();
-  readDHT();
 
   mot_x.setPin(2, 5);
   mot_y.setPin(3, 6);
@@ -399,16 +561,7 @@ void setup() {
 
 void loop() {
   // Alexa Integration
-  if (Serial.available()) {
-    String cmd = Serial.readStringUntil('\n');
-    cmd.trim();
-
-    if (cmd == "SEED") {
-      screen = 15;
-    } else if (cmd == "WATER") {
-      screen = 19;
-    }
-  }
+  checkSerial();
 
   // Main UI state machine
   // Define the screens and the role of the Rotary Encoder
@@ -624,6 +777,7 @@ void loop() {
       shiftscreen(14, 12);
       break;
     case 15:  // Seed Planting Progress screen (Triggered when user clicks on Yes in the Plant Seeds Now screen)
+      checkSerial();
       lcd.clear();
       lcd.setCursor(15, 0);
       if (h > 9) {
@@ -655,13 +809,15 @@ void loop() {
       }
       lcd.setCursor(9, 0);
       lcd.print(daysOfTheWeek[rtc.dayOfWeek() - 1]);
-
       lcd.setCursor(2, 2);
       lcd.print("Planting Seeds...");
       lcd.setCursor(2, 3);
       lcd.print("Please wait...");
+      checkSerial();
+      homeAllMotors();
       seeding();
       lcd.clear();
+      checkSerial();
       lcd.setCursor(1, 0);
       lcd.print("Seeding Successful!");
       lcd.setCursor(7, 1);
@@ -689,6 +845,7 @@ void loop() {
       lcd.print("99%");
       lcd.setCursor(10, 3);
       lcd.print("----");
+      homeAllMotors();
       delay(1000);
       lcd.setCursor(0, 2);
       lcd.print("    Homing Done!!!");
@@ -698,7 +855,14 @@ void loop() {
       lcd.print("                    ");
       pick.write(100);
       delay(2000);
-      screen = 0;
+      if(alexabool) {
+        checkSerial();
+        alexabool = false;
+        screen = 19;
+      } else {
+        checkSerial();
+        screen = 0;
+      }
       break;
     case 16:  // Water Plants Now screen without arrows (Triggered when the user clicks the encoder button when on the Water Plants screen)
       delay(300);
@@ -807,6 +971,7 @@ void loop() {
       lcd.print("Watering Plants..");
       lcd.setCursor(2, 3);
       lcd.print("Please wait...");
+      homeAllMotors();
       watering();
       lcd.clear();
       lcd.setCursor(0, 0);
@@ -836,6 +1001,7 @@ void loop() {
       lcd.print("99%");
       lcd.setCursor(10, 3);
       lcd.print("----");
+      homeAllMotors();
       delay(1000);
       lcd.setCursor(0, 2);
       lcd.print("    Homing Done!!!");
@@ -848,7 +1014,6 @@ void loop() {
       screen = 0;
       break;
     case 20:  // Parameters screen (Triggered when encoder button is clicked on Parameters screen under Menu)
-      readDHT();
       readRTC();
       lcd.setCursor(3, 0);
       lcd.print("* Parameters *");
@@ -876,6 +1041,14 @@ void loop() {
       rtccount = 0;
       break;
   }
+
+  static unsigned long lastSend = 0;
+  if (millis() - lastSend > 1000) {
+    sendMoistureToPi();
+    lastSend = millis();
+  }
+
+  // Always listen for Pi DHT data
   // delay to avoid hardware errors
   delay(1);
 }

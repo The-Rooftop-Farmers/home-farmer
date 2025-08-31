@@ -1,0 +1,5 @@
+flask
+pyserial
+opencv-python
+picamera2
+Adafruit_DHT
