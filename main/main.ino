@@ -415,7 +415,7 @@ void watering() {
     if (mois < 40) {
       checkSerial();
       // Sensor out before watering
-      mot_z.setPosition(40000);
+      mot_z.setPosition(75000);
       delay(500);
       checkSerial();
 
@@ -435,7 +435,7 @@ void watering() {
         checkSerial();
 
         // Lower sensor for new measurement
-        mot_z.setPosition(55000);  // Insert sensor (same as seedplant Z)
+        mot_z.setPosition(75000);  // Insert sensor (same as seedplant Z)
         delay(2000);               // Wait for sensor to stabilize
         checkSerial();
 
@@ -445,7 +445,7 @@ void watering() {
         checkSerial();
 
         // Take sensor out again
-        mot_z.setPosition(40000);
+        mot_z.setPosition(35000);
         delay(500);
         checkSerial();
 
@@ -512,12 +512,8 @@ void sendMoistureToPi() {
   checkSerial();  // Check serial at start
   Serial.print("MOISTURE:");
   int raw = analogRead(A3);
-  if (raw < 10 || raw > 1010) {  // likely unplugged
-    mois = -1;
-  } else {
-    mois = map(raw, 230, 1023, 0, 100);
-    mois = 100 - mois;
-  }
+  mois = map(raw, 180, 1023, 0, 100);
+  mois = 100 - mois;
 
   Serial.println(mois);  // mois is already in percent
   checkSerial();         // Check serial at end
@@ -632,7 +628,7 @@ void setup() {
   mot_z.setHoming(E_OK, 35, 10000, 11);
   mot_x.setPositionLimits(12000, 0);
   mot_y.setPositionLimits(14000, 0);
-  mot_z.setPositionLimits(65000, 0);
+  mot_z.setPositionLimits(80000, 0);
 
   checkSerial();  // Check serial during setup
 
@@ -709,7 +705,6 @@ void loop() {
       readbutton(0);
       checkSerial();
       RTCupdate();
-      homeScreen();
       checkSerial();
       lcd.setCursor(2, 3);
       lcd.print(">");
@@ -718,6 +713,16 @@ void loop() {
       shiftscreen(2, 1);
       checkSerial();
       checkSerial();
+      lcd.setCursor(15, 0);
+      lcd.print("H:");
+      lcd.print(hum);
+      lcd.print("%");
+
+      lcd.setCursor(15, 1);
+      // Print temperature
+      lcd.print("T:");
+      lcd.print(temp);
+      lcd.print("C");
       break;
     case 2:  // Home Screen with Selector on "Info"
       checkSerial();
